@@ -1,43 +1,59 @@
 
 var automate_find_and_book;
 function automate_find_select_book_appointment() {
-	slot_found = false;
 	clearInterval(automate_find_and_book);
 	automate_find_and_book = setInterval(keep_search_select, 2000);
-	console.log("clear slot status, interval and start automation");
+	console.log("Fresh start for automated booking.");
 }
 
 function keep_search_select() {
 	// search slots
-	document.querySelector("ion-button.pin-search-btn.district-search").click();
-	console.log("initiate search");
+	let search_button = document.querySelector("ion-button.pin-search-btn.district-search");
+	if (!search_button) {
+		console.log("Search button not found!");
+		return;
+	}
+	
+	search_button.click();
+	console.log("Initiate search.");
 
 	// assuming page is updated after searching slot in 1 sec, find and select available slot after that
-	console.log("find and select available slot");
+	console.log("Scan and select available slot.");
 	setTimeout(find_and_select_available_slot, 1500);
 }
 
-// search slots and run slot selection
-var slot_found = false;
-
 function find_and_select_available_slot() {
-	console.log("initiate finding and selecting available slot");
-	unbooked_vaccination_centres = document.querySelectorAll("div.mat-list-text div.slots-box:not(.no-available):not(.no-seat)").forEach(function(unbooked_vaccination_centre){
+	console.log("Initiate scanning and selecting available slot");
+	
+	var slot_found = false;
+	
+	unbooked_vaccination_centres = document.querySelectorAll("div.mat-list-text div.slots-box:not(.no-available):not(.no-seat)");
+	if (!unbooked_vaccination_centres) {
+		console.log("No available slot found!");
+		return;
+	}
+	console.log("Total available slots found: " + unbooked_vaccination_centres.length);
+	
+	unbooked_vaccination_centres.forEach(function(unbooked_vaccination_centre){
 		console.log('unbooked_vaccination_centre: ', unbooked_vaccination_centre);
 		if (unbooked_vaccination_centre.querySelector("span.age-limit").textContent == "Age 18+") {
 			slot_found = true;
-			console.log("clear automation(time interval)");
 			clearInterval(automate_find_and_book);
+			console.log("Stop searching further.");
 			
-			console.log('18+ slot found! Book it now!');
 			unbooked_vaccination_centre.click();
+			console.log('Selected the very fist available slot.');
 			
 			// appointment page
-			console.log("select the first time slot");
 			document.querySelector("div.time-slot-list ion-button").click();
+			console.log("Selected the very first time slot.");
 			
-			console.log("increase size of captcha");
+			// refresh captcha to avoid delay because of captcha session expired
+			document.querySelector("div.img-wrap a").click();
+			console.log("Captcha refereshed.");
+			
 			document.querySelector("div.img-wrap img").style.width = "500%";
+			console.log("Increased the size of captcha.");
 
 			// focus captcha input
 			var captcha_input = document.querySelector("div.input-wrap input");
@@ -63,16 +79,23 @@ function find_and_select_available_slot() {
 
 function stop_automation() {
 	clearInterval(automate_find_and_book);
-	console.log("clear automation(time interval)");
+	console.log("Stop automated booking.");
 }
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    /* console.log(sender.tab ?
+    console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
-                "from the extension"); */
+                "from the extension");
+				
     if (request.click == "automate_find_select_book_appointment") {
-		sendResponse({automation: "initiated"});
+		sendResponse({automation: "initiated"}, response => {
+			if (chrome.runtime.lastError) {
+				console.log("This solution will work on Co-WIN website only.");
+				alert("This solution will work on Co-WIN website only.");
+			}
+		});
+		
 		automate_find_select_book_appointment();
 	} else if (request.click == "stop_automation") {
 		sendResponse({automation: "stopped"});
