@@ -4,18 +4,49 @@
     <title>COVID Appointment Helper</title>
     <!-- <script src="popup.js"></script> -->
     <script src="helper.js"></script>
+	<style>
+		input {
+			 border-radius: 5px;
+			 color: #ffffff;
+			 padding: 5px;
+		}
+	</style>
   </head>
-  <body>
-	<h4>To use this solution you need to login to <a id="cowin_website" href="https://selfregistration.cowin.gov.in/appointment">Co-WIN website</a> and search with state and district.</h4>
-    <form id="covid_appointment_helper" name="covid_appointment_helper">
-		<!-- create the automation button -->
-		<input id="automate_find_select_book_appointment" type="button" value="Automate appointment booking" />
-		
-		<!-- stop automation button -->
-		<input id="stop_automation" type="button" value="Stop automation" />
-		
-		<!-- create the "select and book appointment" button -->
-		<input id="select_and_book_appointment" type="button" value="Select and book appointment" />
-	</form>
+  <body style="background-color: #9e9e9e1f;">
+	<div style="width: 200px;">
+		<h4>To use this solution you need to login to <a id="cowin_website" href="https://selfregistration.cowin.gov.in/appointment">Co-WIN website</a> and search by PIN or District.</h4>
+		<hr />
+		<div>
+			<form id="covid_appointment_helper" name="covid_appointment_helper">
+				<!-- filters -->
+				<div>
+					<span style="font-weight: bold;">Select Age:</span>
+					<input type="radio" name="age" id="age18" value="Age 18+" checked="checked"><label for="age18">18+</label>
+					<input type="radio" name="age" id="age45" value="Age 45+"><label for="age45">45+</label>
+				</div>
+				<br />
+				<div>
+					<span style="font-weight: bold;">Select Vaccine: </span><br />
+					<input type="checkbox" name="vaccine" id="vaccine_covishield" value="COVISHIELD" checked="checked"><label for="vaccine_covishield">Covishield</label>
+					<input type="checkbox" name="vaccine" id="vaccine_covaxin" value="COVAXIN" checked="checked"><label for="vaccine_covaxin">Covaxin</label>
+					<br />
+					<input type="checkbox" name="vaccine" id="vaccine_sputanik_v" value="SPUTANIK V" checked="checked"><label for="vaccine_sputanik_v">Sputanik V</label>
+				</div>
+				<br />
+				<div style="text-align: center;">
+					<!-- create the automation button -->
+					<input id="automate_search_book_appointment" type="button" value="Automate appointment booking" style="border: 1px solid darkgreen; background-color: #4CAF50; cursor: pointer;" />
+					
+					<!-- stop automation button -->
+					<input id="stop_automation" type="button" value="Stop" style="display:none; border: 1px solid darkred; background-color: #f4511e; width: 50px; cursor: pointer;" />
+					
+					<!-- create the "select and book appointment" button -->
+					<!-- <input id="select_and_book_appointment" type="button" value="Select and book appointment" /> -->
+				</div>
+			</form>
+		</div>
+		<br />
+		<div><span style="font-weight: bold;">Note:</span> If the button doesn't work then try refreshing the page.</div>
+	</div>
   </body>
 </html>

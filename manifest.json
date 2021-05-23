@@ -1,18 +1,22 @@
 {
 	"manifest_version" : 2,
 	"name" : "Book Covid Vaccine Appointment Faster",
-	"description" : "This extension automize few steps to book appointment on CoWIN website for 18+ age",
-	"version" : "1.0",
+	"description" : "Automize few steps to book appointment on CoWIN website. Increase the probability to book the available vaccination centre faster.",
+	"version" : "2.0",
 	"content_scripts" : [{
 			"matches" : [
-				"https://selfregistration.cowin.gov.in/appointment"
+				"https://selfregistration.cowin.gov.in/*"
 			],
-			"js" : ["popup.js"],
-			"run_at" : "document_end"
+			"js" : ["popup.js"]
 		}
 	],
 	"browser_action" : {
-		"default_icon" : "covid_vaccine.jpg",
-		"default_popup" : "popup.html"
+		"default_icon" : {
+		  "16": "icon_16.jpg",
+		  "24": "icon_24.jpg",
+		  "32": "icon_32.jpg"
+		},
+		"default_popup" : "popup.html",
+		"default_title": "Book Covid Vaccine Appointment Faster"
 	}
 }
